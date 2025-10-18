@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>DELNIXA — Enerjiyi Hisseden Zekâ</title>
+  <meta name="description" content="DELNIXA: Enerji piyasası için yapay zekâ tabanlı tahminleme ve ticaret motoru. Veriden Bilince." />
+  <link rel="canonical" href="https://delnixa.ai/" />
+  <meta name="theme-color" content="#0d0f13" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="assets/favicon.png" sizes="32x32" type="image/png">
+  <link rel="apple-touch-icon" href="assets/logo.png">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="DELNIXA — Enerjiyi Hisseden Zekâ" />
+  <meta property="og:description" content="Enerji tahminleme + ticaret botları + yapay zekâ. Veriden Bilince." />
+  <meta property="og:url" content="https://delnixa.ai/" />
+  <meta property="og:image" content="assets/cover.png" />
+
+  <link rel="stylesheet" href="styles.css?v=3" />
+</head>
+<body>
+  <noscript>Lütfen bu sayfayı görüntülemek için JavaScript'i etkinleştirin.</noscript>
+
+  <canvas id="energyCanvas" aria-hidden="true"></canvas>
+  <div class="halo"></div>
+
+  <div class="container">
+    <img src="assets/logo.png" alt="DELNIXA Logo" class="logo" decoding="async" />
+    <h1 class="brand">DELNIXA</h1>
+    <h2 class="subtitle">Enerjiyi Hisseden Zekâ</h2>
+    <p class="tagline">Veriden Bilince</p>
+
+    <div class="countdown" id="countdown" role="status" aria-live="polite">Yükleniyor...</div>
+
+    <form class="subscribe" action="https://formspree.io/f/your-id-here" method="POST">
+      <label class="sr-only" for="email">E-posta</label>
+      <input id="email" name="email" type="email" placeholder="E-posta adresinizi girin" required />
+      <button type="submit">Abone Ol</button>
+    </form>
+
+    <div class="social-links">
+      <a href="https://www.linkedin.com" target="_blank" rel="noopener">LinkedIn</a>
+      <a href="https://github.com" target="_blank" rel="noopener">GitHub</a>
+      <a href="https://x.com" target="_blank" rel="noopener">X / Twitter</a>
+    </div>
+  </div>
+
+  <footer>© 2025 DELNIXA AI SYSTEMS — Coming Soon</footer>
+
+  <script>
+    // Countdown
+    const targetDate = new Date('2026-01-01T00:00:00');
+    const el = document.getElementById('countdown');
+    function tick() {
+      const diff = targetDate - new Date();
+      if (diff <= 0) { el.textContent = 'DELNIXA artık yayında!'; return; }
+      const d = Math.floor(diff / 86400000);
+      const h = Math.floor((diff % 86400000) / 3600000);
+      const m = Math.floor((diff % 3600000) / 60000);
+      const s = Math.floor((diff % 60000) / 1000);
+      el.textContent = `${d}g ${h}s ${m}d ${s}sn kaldı`;
+    }
+    tick(); setInterval(tick, 1000);
+
+    // Energy canvas animation
+    const canvas = document.getElementById('energyCanvas');
+    const ctx = canvas.getContext('2d');
+    function resize() { canvas.width = innerWidth; canvas.height = innerHeight; }
+    addEventListener('resize', resize); resize();
+    const N = 160;
+    const P = new Array(N).fill(0).map(()=>({x:Math.random()*innerWidth,y:Math.random()*innerHeight,vx:(Math.random()-0.5)*0.5,vy:(Math.random()-0.5)*0.5,r:Math.random()*1.5+0.5}));
+    function loop() {
+      ctx.fillStyle = 'rgba(6,7,9,0.18)';
+      ctx.fillRect(0,0,canvas.width,canvas.height);
+      ctx.strokeStyle = 'rgba(109,196,255,0.28)';
+      ctx.lineWidth = 0.3;
+      ctx.beginPath();
+      for (const p of P) {
+        p.x += p.vx; p.y += p.vy;
+        if (p.x < 0 || p.x > canvas.width) p.vx *= -1;
+        if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
+        ctx.moveTo(p.x, p.y);
+        ctx.arc(p.x, p.y, p.r, 0, Math.PI*2);
+      }
+      ctx.stroke();
+      requestAnimationFrame(loop);
+    }
+    loop();
+  </script>
+</body>
+</html>
